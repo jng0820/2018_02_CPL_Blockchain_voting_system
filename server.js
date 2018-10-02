@@ -199,6 +199,9 @@ abi = JSON.parse('[\n' +
 VotingContract = web3.eth.contract(abi);
 contractInstance = VotingContract.at('0x35bc167fd83e3267c14c7f762ff7325b4784632b');
 var express = require('express');
+var bodyParser = require('body-parser');
+app.set('view engine','jade');
+app.use(bodyParser.urlencoded({extended:false}));
 var app = express();
 const port = 3000;
 app.get('/',(req,res) =>
@@ -207,38 +210,24 @@ app.get('/',(req,res) =>
     console.log('Customer join!');
 });
 app.use(express.static('public'));
-app.get('/route', (req,res) =>
+app.get('/', (req,res) =>
 {
-    res.send('Hello Router, <img src="/google.png">');
-    console.log(web3.eth.accounts)
-})
-app.get('/dynamic',(req,res) =>{
-    var lis='';
-    for (var i =1;i<=5;i++)
-    {
-        lis += '<li>coding'+i+'</li>';
-    }
-    var time=Date();
-    var output = `
-<html>
-    <head>
-        <title>
 
-        </title>
-    </head>
-    <body>
-        <h1>Hello Dynamic!</h1>
-        <ul>        
-            ${lis}
-        </ul>
-        ${time}
-    </body>
-</html>`;
-    res.send(output);
 })
-app.get('/login',(req,res) =>
+app.post('/login',(req,res) =>{
+
+})
+app.get('/admin',(req,res) =>
 {
-    res.send('Login Please');
+
+});
+app.get('/vote',(req,res) =>
+{
+
+});
+app.get('/result',(req,res) =>
+{
+
 });
 app.listen(port,() =>
 {
