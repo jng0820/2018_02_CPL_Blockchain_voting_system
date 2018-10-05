@@ -1,203 +1,226 @@
 
 Web3 = require('web3')
 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-abi = JSON.parse('[\n' +
-    '\t{\n' +
-    '\t\t"constant": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_id",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "signUp",\n' +
-    '\t\t"outputs": [],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"constant": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_idx",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "get_votenum",\n' +
-    '\t\t"outputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"constant": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_id",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "finish_Vote",\n' +
-    '\t\t"outputs": [],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"constant": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_id",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "startvote",\n' +
-    '\t\t"outputs": [],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"constant": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_id",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_idxnumber",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "upVote",\n' +
-    '\t\t"outputs": [],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"constant": true,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "candidateList",\n' +
-    '\t\t"outputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "upVote",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "party",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "name",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "view",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"constant": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_id",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_name",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"name": "_party",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "addCandidator",\n' +
-    '\t\t"outputs": [],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "function"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"inputs": [],\n' +
-    '\t\t"payable": false,\n' +
-    '\t\t"stateMutability": "nonpayable",\n' +
-    '\t\t"type": "constructor"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"anonymous": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"indexed": false,\n' +
-    '\t\t\t\t"name": "name",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"indexed": false,\n' +
-    '\t\t\t\t"name": "party",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "AddCandidate",\n' +
-    '\t\t"type": "event"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"anonymous": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"indexed": false,\n' +
-    '\t\t\t\t"name": "name",\n' +
-    '\t\t\t\t"type": "string"\n' +
-    '\t\t\t},\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"indexed": false,\n' +
-    '\t\t\t\t"name": "voteNumber",\n' +
-    '\t\t\t\t"type": "uint256"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "UpVote",\n' +
-    '\t\t"type": "event"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"anonymous": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"indexed": false,\n' +
-    '\t\t\t\t"name": "Alive",\n' +
-    '\t\t\t\t"type": "bool"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "FinishVote",\n' +
-    '\t\t"type": "event"\n' +
-    '\t},\n' +
-    '\t{\n' +
-    '\t\t"anonymous": false,\n' +
-    '\t\t"inputs": [\n' +
-    '\t\t\t{\n' +
-    '\t\t\t\t"indexed": false,\n' +
-    '\t\t\t\t"name": "owner",\n' +
-    '\t\t\t\t"type": "address"\n' +
-    '\t\t\t}\n' +
-    '\t\t],\n' +
-    '\t\t"name": "voteStart",\n' +
-    '\t\t"type": "event"\n' +
-    '\t}\n' +
-    ']');
+abi = JSON.parse([
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "string"
+            }
+        ],
+        "name": "startvote",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_idx",
+                "type": "uint256"
+            }
+        ],
+        "name": "get_votenum",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "a",
+                "type": "string"
+            },
+            {
+                "name": "b",
+                "type": "string"
+            }
+        ],
+        "name": "compareString",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "string"
+            }
+        ],
+        "name": "signUp",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "candidateList",
+        "outputs": [
+            {
+                "name": "upVote",
+                "type": "uint256"
+            },
+            {
+                "name": "party",
+                "type": "string"
+            },
+            {
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "string"
+            },
+            {
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "name": "_party",
+                "type": "string"
+            }
+        ],
+        "name": "addCandidator",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "string"
+            },
+            {
+                "name": "_idxnumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "upVote",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "string"
+            }
+        ],
+        "name": "finish_Vote",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "name": "party",
+                "type": "string"
+            }
+        ],
+        "name": "AddCandidate",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "name": "voteNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "UpVote",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "Alive",
+                "type": "bool"
+            }
+        ],
+        "name": "FinishVote",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "voteStart",
+        "type": "event"
+    }
+]);
 
 VotingContract = web3.eth.contract(abi);
-contractInstance = VotingContract.at('0x35bc167fd83e3267c14c7f762ff7325b4784632b');
+contractInstance = VotingContract.at('0x35bc167fd83e3267c14c7f762ff7325b4784632b'); // deploy 할때 바꿀것
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
