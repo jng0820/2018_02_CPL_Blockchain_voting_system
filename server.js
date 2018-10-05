@@ -200,12 +200,14 @@ VotingContract = web3.eth.contract(abi);
 contractInstance = VotingContract.at('0x35bc167fd83e3267c14c7f762ff7325b4784632b');
 var express = require('express');
 var bodyParser = require('body-parser');
-app.set('view engine','jade');
-app.use(bodyParser.urlencoded({extended:false}));
 var app = express();
 const port = 3000;
 var mongoose = require('mongoose');
+var num_of_candidate = 0;
 
+app.set('view engine','jade');
+app.set('views','./views');
+app.use(bodyParser.urlencoded({extended:false}));
 
 var UserSchema;
 var CandidateSchema;
@@ -264,6 +266,22 @@ app.post('/signUp',(req,res)=>{
 
         }
     })
+
+    // 블록체인에 트랜잭션 보내기 추가
+})
+app.get('/new_candiddate', (req,res) => {
+
+})
+app.post('/new_candidate', (req,res) => {
+    var name = req.body.name;
+    var party = req.body.party;
+    var newCandidate = new CandidateModel({idx: num_of_candidate, name: name, party: party});
+    newCandidate.save(err => {
+
+    })
+    num_of_candidate += 1;
+
+    // 블록체인에 트랜잭션 보내기 추가
 })
 app.get('/login',(req,res) => {
 
@@ -287,6 +305,8 @@ app.get('/vote',(req,res) => {
 app.post('/vote',(req,res)=>{
     var id = req.body.id;
     var idx = req.body.idx;
+
+    // 블록체인에 트랜잭션 보내기 추가
 })
 app.get('/result',(req,res) =>
 {
@@ -295,6 +315,6 @@ app.get('/result',(req,res) =>
 app.listen(port,() =>
 {
     console.log(`Connected ${port} port!`);
-    ConnectDB();
+    connectDB();
     console.log('DB connect');
 });
