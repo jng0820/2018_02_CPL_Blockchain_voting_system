@@ -220,13 +220,15 @@ abi = JSON.parse(`[
 ]`);
 
 var VotingContract = web3.eth.contract(abi);
-var contractInstance = VotingContract.at('0xaa229ffc3922ebadfce4c30f2647cc874c359d75'); // deploy 할때 바꿀것
+var contractInstance = VotingContract.at('0xe54884535e63812a8a55e562d61a7d653362b4e8'); // deploy 할때 바꿀것
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 const port = 3000;
 var mongoose = require('mongoose');
 var num_of_candidate = 0;
+var md5 = require('md5');
+var salt = '$%#@7@zvvcweer';
 var session = require('express-session')
 app.use(session({
     secret: 'asd@fij80-124', // 암호화
@@ -282,7 +284,7 @@ app.get('/signUp',(req,res) =>{
 })
 app.post('/signUp',(req,res)=>{
     var id = req.body.id;
-    var pw = req.body.pw;
+    var pw = md5(req.body.pw+salt);
     var name = req.body.name;
     var phone = req.body.phone;
     UserModel.find({id: id}, (err, result)=>{
@@ -292,29 +294,30 @@ app.post('/signUp',(req,res)=>{
             newUser.save(err =>{
 
             })
-            contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},() => {
+            contractInstance.signUp(md5(id+salt),{from:web3.eth.accounts[0],gas:4700000},() => {
 
             })
             res.send("가입되었습니다.");
+            console.log(id+' '+pw);
         }
         else
             res.send("이미 가입된 회원입니다.");
     })
 
 })
-app.get('/new_candiddate', (req,res) => {
-
+app.get('/new_candidate', (req,res) => {
+    res.render('candidate');
 })
 app.post('/new_candidate', (req,res) => {
     var name = req.body.name;
     var party = req.body.party;
-    var id = req.session.id;
+    //var id = req.session.id;
     var newCandidate = new CandidateModel({idx: num_of_candidate, name: name, party: party});
     newCandidate.save(err => {
 
     })
     num_of_candidate += 1;
-    contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
+    contractInstance.addCandidator('0'/*md5(id+salt)*/,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
 
     })
     res.redirect('/new_candidate');
@@ -330,7 +333,7 @@ app.get('/login',(req,res) => {
 })
 app.post('/login',(req,res) =>{
     var id = req.body.id;
-    var pw = req.body.pw;
+    var pw = md5(req.body.pw+salt);
     UserModel.find({id: id}, (err, result)=>{
         if(result.length == 1 && result[0].password == pw)
         {
@@ -352,7 +355,7 @@ app.post('/vote',(req,res)=>{
     var id = req.session.id;
     var idx = parseInt(req.body.idx);
 
-    contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {
+    contractInstance.upVote(md5(id+salt),idx,{from:web3.eth.accounts[0],gas:4700000},() => {
 
     })
     // 블록체인에 트랜잭션 보내기 추가
