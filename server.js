@@ -204,6 +204,38 @@ app.set('view engine','jade');
 app.use(bodyParser.urlencoded({extended:false}));
 var app = express();
 const port = 3000;
+var mongoose = require('mongoose');
+
+
+var UserSchema;
+var CandidateSchema;
+var UserModel;
+var CandidateModel;
+function connectDB(){
+    var dbUrl = "mongodb://localhost:27017/DB"
+
+    mongoose.connect(dbUrl);
+    db = mongoose.connection;
+
+    db.on('error',console.error.bind(console,'mongoose connection err'));
+    db.on('open',() =>{
+        CandidateSchema = mongoose.Schema({
+            idx: Number,
+            name: String,
+            party: String
+        });
+        UserSchema = mongoose.Schema({
+            id: String,
+            password: String,
+            name: String,
+            phone: String
+        });
+        CandidateModel = mongoose.model("candidates",CandidateSchema);
+        UserModel = mongoose.model("users", UserSchema);
+        console.log('mongoose connection open! : '+dbUrl);
+    });
+    db.on('disconnected',connectDB);
+}
 app.get('/',(req,res) =>
 {
     res.send('Hello World\n');
@@ -214,22 +246,55 @@ app.get('/', (req,res) =>
 {
 
 })
-app.post('/login',(req,res) =>{
+app.get('/signUp',(req,res) =>{
 
 })
-app.get('/admin',(req,res) =>
-{
+app.post('/signUp',(req,res)=>{
+    var id = req.body.id;
+    var pw = req.body.pw;
+    var name = req.body.name;
+    var phone = req.body.phone;
+    UserModel.find({id: id}, (err, result)=>{
+        if(result.length == 0)
+        {
+            var newUser = new UserModel({id: id,password: pw,name: name, phone: phone});
+            newUser.save(err =>{
 
-});
-app.get('/vote',(req,res) =>
-{
+            })
 
-});
+        }
+    })
+})
+app.get('/login',(req,res) => {
+
+})
+app.post('/login',(req,res) =>{
+    var id = req.body.id;
+    var pw = req.body.pw;
+    UserModel.find({id: id}, (err, result)=>{
+        if(result.length == 1 && result[0].password == pw)
+        {
+
+        }
+    })
+})
+app.get('/admin',(req,res) => {
+
+})
+app.get('/vote',(req,res) => {
+
+})
+app.post('/vote',(req,res)=>{
+    var id = req.body.id;
+    var idx = req.body.idx;
+})
 app.get('/result',(req,res) =>
 {
 
-});
+})
 app.listen(port,() =>
 {
     console.log(`Connected ${port} port!`);
+    ConnectDB();
+    console.log('DB connect');
 });

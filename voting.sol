@@ -18,7 +18,7 @@ contract Voting{
     address owner;
     //variable
     
-    mapping(uint => voter) voterlist;
+    mapping(byte => voter) voterlist;
     
     event AddCandidate(string name,string party);
     event UpVote(string name, uint voteNumber);
@@ -39,7 +39,7 @@ contract Voting{
     }
     //constructor
     
-    function signUp(uint _id) public{
+    function signUp(byte _id) public{
         if(_id == 0)
             voterlist[_id] = (voter(1,false));
         else
