@@ -42,31 +42,35 @@ contract Voting{
     function compareString(string a, string b) public returns(bool){
         return keccak256(a) == keccak256(b);
     }
-    function signUp(string _id) public{
-        if(compareString(_id,'0') == true)
+    function signUp(string _id) public returns (bool){
+        if(compareString(_id,'admin') == true)
             voterlist[_id] = (voter(1,false));
         else
             voterlist[_id] = (voter(0,false));
+
+        return true;
     }
 
-    function addCandidator(string _id,string _name, string _party) public onlyOwner{
+    function addCandidator(string _id,string _name, string _party) public onlyOwner returns (bool){
         require(voteAlive == false);
         require(voterlist[_id].right == 1);
         candidateList.push(candidate(0,_party,_name));
 
         emit AddCandidate(_name,_party);
+        return true;
         //emit event
     }
     // add candidates
 
-    function startvote(string _id) public onlyOwner{
+    function startvote(string _id) public onlyOwner returns (bool){
         require(voteAlive == false);
         require(voterlist[_id].right == 1);
         voteAlive = true;
+        return true;
     }
     //vote start
 
-    function upVote(string _id, uint _idxnumber) public {
+    function upVote(string _id, uint _idxnumber) public returns (bool) {
         require(voteAlive == true);
         require(_idxnumber < candidateList.length);
         require(voterlist[_id].voteCheck == false);
@@ -74,24 +78,27 @@ contract Voting{
         voterlist[_id].voteCheck = true;
         emit UpVote(candidateList[_idxnumber].name,candidateList[_idxnumber].upVote);
         //emit event
+        return true;
     }
 
     // vote
 
 
-    function finish_Vote(string _id) public onlyOwner{
+    function finish_Vote(string _id) public onlyOwner returns (bool){
         require(voteAlive == true);
         require(voterlist[_id].right == 1);
         voteAlive = false;
-        
+
         emit FinishVote(voteAlive);
-        
+        return true;
+
     }
     // finish vote
-    
+
     function get_votenum(uint _idx) public onlyOwner returns(uint){
         require(voteAlive == false);
+        if(_idx < 0 || _idx>candidateList.length)
+            return 0;
         return candidateList[_idx].upVote;
     }
 }
-

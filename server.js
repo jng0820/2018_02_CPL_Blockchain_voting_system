@@ -1,226 +1,9 @@
 
-Web3 = require('web3')
-web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-abi = JSON.parse(`[
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_id",
-                "type": "string"
-            }
-        ],
-        "name": "startvote",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_idx",
-                "type": "uint256"
-            }
-        ],
-        "name": "get_votenum",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "a",
-                "type": "string"
-            },
-            {
-                "name": "b",
-                "type": "string"
-            }
-        ],
-        "name": "compareString",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_id",
-                "type": "string"
-            }
-        ],
-        "name": "signUp",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "candidateList",
-        "outputs": [
-            {
-                "name": "upVote",
-                "type": "uint256"
-            },
-            {
-                "name": "party",
-                "type": "string"
-            },
-            {
-                "name": "name",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_id",
-                "type": "string"
-            },
-            {
-                "name": "_name",
-                "type": "string"
-            },
-            {
-                "name": "_party",
-                "type": "string"
-            }
-        ],
-        "name": "addCandidator",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_id",
-                "type": "string"
-            },
-            {
-                "name": "_idxnumber",
-                "type": "uint256"
-            }
-        ],
-        "name": "upVote",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_id",
-                "type": "string"
-            }
-        ],
-        "name": "finish_Vote",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "name": "party",
-                "type": "string"
-            }
-        ],
-        "name": "AddCandidate",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "name": "voteNumber",
-                "type": "uint256"
-            }
-        ],
-        "name": "UpVote",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "name": "Alive",
-                "type": "bool"
-            }
-        ],
-        "name": "FinishVote",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "name": "owner",
-                "type": "address"
-            }
-        ],
-        "name": "voteStart",
-        "type": "event"
-    }
-]`);
 
-var VotingContract = web3.eth.contract(abi);
-var contractInstance = VotingContract.at('0xe54884535e63812a8a55e562d61a7d653362b4e8'); // deploy 할때 바꿀것
+var Web3;
+var abi;
+var VotingContract;
+var contractInstance;
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -244,6 +27,264 @@ var UserSchema;
 var CandidateSchema;
 var UserModel;
 var CandidateModel;
+
+function web3_connect(){
+    Web3 = require('web3')
+    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    abi = JSON.parse(`[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "string"
+			}
+		],
+		"name": "startvote",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_idx",
+				"type": "uint256"
+			}
+		],
+		"name": "get_votenum",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "string"
+			},
+			{
+				"name": "b",
+				"type": "string"
+			}
+		],
+		"name": "compareString",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "string"
+			}
+		],
+		"name": "signUp",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "candidateList",
+		"outputs": [
+			{
+				"name": "upVote",
+				"type": "uint256"
+			},
+			{
+				"name": "party",
+				"type": "string"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "string"
+			},
+			{
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"name": "_party",
+				"type": "string"
+			}
+		],
+		"name": "addCandidator",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "string"
+			},
+			{
+				"name": "_idxnumber",
+				"type": "uint256"
+			}
+		],
+		"name": "upVote",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "string"
+			}
+		],
+		"name": "finish_Vote",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "party",
+				"type": "string"
+			}
+		],
+		"name": "AddCandidate",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "voteNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "UpVote",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "Alive",
+				"type": "bool"
+			}
+		],
+		"name": "FinishVote",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "voteStart",
+		"type": "event"
+	}
+]`);
+    VotingContract = web3.eth.contract(abi);
+    contractInstance = VotingContract.at('0xe54884535e63812a8a55e562d61a7d653362b4e8'); // deploy 할때 바꿀것
+
+}
+
+function ID_Hashing(_id){
+    if(_id != 'admin')
+        var id =  md5(id+salt);
+    else var id = 'admin';
+    return id;
+}
+
 function connectDB(){
     var dbUrl = "mongodb://localhost:27017/DB"
 
@@ -283,7 +324,7 @@ app.get('/signUp',(req,res) =>{
     res.render('sign_up');
 })
 app.post('/signUp',(req,res)=>{
-    var id = req.body.id;
+    var id = ID_Hashing(req.body.id);
     var pw = md5(req.body.pw+salt);
     var name = req.body.name;
     var phone = req.body.phone;
@@ -294,11 +335,11 @@ app.post('/signUp',(req,res)=>{
             newUser.save(err =>{
 
             })
-            contractInstance.signUp(md5(id+salt),{from:web3.eth.accounts[0],gas:4700000},() => {
+            contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},() => {
 
             })
             res.send("가입되었습니다.");
-            console.log(id+' '+pw);
+            console.log(id+' '+name+' signup success.');
         }
         else
             res.send("이미 가입된 회원입니다.");
@@ -311,24 +352,24 @@ app.get('/new_candidate', (req,res) => {
 app.post('/new_candidate', (req,res) => {
     var name = req.body.name;
     var party = req.body.party;
-    //var id = req.session.id;
+    var id = ID_Hashing(req.session.id);
     var newCandidate = new CandidateModel({idx: num_of_candidate, name: name, party: party});
     newCandidate.save(err => {
 
     })
     num_of_candidate += 1;
-    contractInstance.addCandidator('0'/*md5(id+salt)*/,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
+    contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
 
     })
     res.redirect('/new_candidate');
 })
 app.get('/login',(req,res) => {
-    if(req.session.id == admin)
+    if(req.session.id == 'admin')
         res.redirect('/admin');
     else if(req.session.id == false)
         res.render('login');
     else
-        res.redirect('vote');
+        res.redirect('/vote');
 
 })
 app.post('/login',(req,res) =>{
@@ -348,17 +389,21 @@ app.post('/login',(req,res) =>{
 app.get('/admin',(req,res) => {
 
 })
+app.post('/admin',(req,res)=>{
+
+})
 app.get('/vote',(req,res) => {
     res.render('vote');
 })
 app.post('/vote',(req,res)=>{
-    var id = req.session.id;
+    var id = ID_Hashing(req.session.id);
     var idx = parseInt(req.body.idx);
-
-    contractInstance.upVote(md5(id+salt),idx,{from:web3.eth.accounts[0],gas:4700000},() => {
+    var check = false;
+    check = contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {
 
     })
-    // 블록체인에 트랜잭션 보내기 추가
+    if(check == true)
+        console.log('vote commit success.')
 })
 app.get('/result',(req,res) =>
 {
@@ -367,6 +412,11 @@ app.get('/result',(req,res) =>
 app.listen(port,() =>
 {
     console.log(`Connected ${port} port!`);
+    web3_connect();
+    if(length(web3.eth.accounts) != 0) {
+        console.log('Ethreum connected.');
+        console.log(web3.eth.accounts);
+    }
     connectDB();
-    console.log('DB connect');
+    console.log('DB connected.');
 });
