@@ -316,10 +316,6 @@ app.get('/',(req,res) =>
     console.log('Customer join!');
 });
 app.use(express.static('public'));
-app.get('/', (req,res) =>
-{
-
-})
 app.get('/signUp',(req,res) =>{
     res.render('sign_up');
 })
@@ -366,11 +362,14 @@ app.post('/new_candidate', (req,res) => {
 app.get('/login',(req,res) => {
     if(req.session.id == 'admin')
         res.redirect('/admin');
-    else if(req.session.id == false)
-        res.render('login');
-    else
-        res.redirect('/vote');
+    else {
+        UserModel.find({id: req.session.id}, (err, result) => {
+            if (result == 0)
+                res.render('login');
+            else res.redirect('/vote');
 
+        });
+    }
 })
 app.post('/login',(req,res) =>{
     var id = req.body.id;
@@ -413,7 +412,7 @@ app.listen(port,() =>
 {
     console.log(`Connected ${port} port!`);
     web3_connect();
-    if(length(web3.eth.accounts) != 0) {
+    if(web3.eth.accounts) {
         console.log('Ethreum connected.');
         console.log(web3.eth.accounts);
     }
