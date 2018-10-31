@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>BLOCK CHAIN VOTEING SYSTEM</title>
+    <link href="CSS/default.css" rel="stylesheet" type="text/css" media="all">
+    <link href="CSS/front.css" rel="stylesheet" type="text/css" media="all">
+    <link href="CSS/print.css" rel="stylesheet" type="text/css" media="print">
+    <link href="CSS/iphone.css" rel="stylesheet" type="text/css" media="screen">
+    <script type="text/javascript" src="script/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="script/s3Slider.js"></script>
+    <!--[if lt IE 9]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js" type="text/javascript"></script>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/ie7-squish.js" type="text/javascript"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <!--[if lt IE 8]>
+    <style rel="stylesheet" type="text/css">
+    #s3sliderContent {
+        margin: 0; /* important */
+     }
+    </style>
+    <![endif]-->
+
+
+    <!--[if IE 6]>
+     <script src="../script/DD_belatedPNG.js"></script>
+     <script>
+       /* EXAMPLE */
+       DD_belatedPNG.fix('#wrap');
+       DD_belatedPNG.fix('#main_img');
+
+     </script>
+     <![endif]-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#s3slider').s3Slider({
+                timeOut: 4000
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="wrap">
+    <header>
+        <div id="login"> <a href="#">login</a> | <a href="signUp">Join</a></div>
+        <div class="clear"></div>
+        <div id="logo"><img src="images/logo.gif" width="265" height="62" alt="Fun Web"></div>
+        <nav id="top_menu">
+            <ul>
+                <li><a href="./">HOME</a></li>
+                <li><a href="vote/welcome.html">VOTE</a></li>
+
+            </ul>
+        </nav>
+
+    </header>
+    <div class="clear"></div>
+    <div id="main_img">
+        <!--  s3Slider -->
+        <div id="s3slider">
+            <ul id="s3sliderContent">
+                <li class="s3sliderImage">
+                    <img src="images/main_img1.jpg" width="971" height="282">
+                </li>
+
+                <div class="clear s3sliderImage"></div>
+            </ul>
+        </div>
+        <!--  s3Slider -->
+
+    </div>
+    <div class="clear"></div>
+    <article id="front">
+        <div id="solution">
+
+            <div id="hosting">
+                <h3>투표의 투명성 제공</h3>
+                <p> 투표자별 고유 Address 제공<br> </p>
+                <p> <br>투표 내역이 장부에 실시간 기록 </p>
+                <p>　　　　</p>
+            </div>
+
+            <div id="security">
+                <h3>개표 리소스 절감</h3>
+                <p>투표마감시 즉시 집계 가능</p>
+                <p>　　　</p>
+                <p>　　　　</p>
+            </div>
+
+            <div id="payment">
+                <h3>비밀 투표 보장</h3>
+                <p>투표자의 선거 내역 비밀 보장 </p>
+                <p>　　　　 </p>
+                <p>　　　　</p>
+            </div>
+
+
+        </div>
+        <div class="clear"></div>
+
+    </article>
+    <div class="clear"></div>
+
+    <footer>
+        <hr>
+        <div id="copy">
+            All contents Copyright 2018 VoteWeb Inc. all rights reserved<br><br>
+            Contact mail : vote@knu.ac.kr Tel: +82 0 123 4567 종합프로젝트설계:)
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
