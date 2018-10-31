@@ -18,6 +18,8 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+var path = require('path');
+app.use(express.static(path.join(__dirname,'views')))
 
 var ejs = require('ejs');
 app.set('view engine','ejs');
@@ -313,14 +315,13 @@ function connectDB(){
 }
 app.get('/',(req,res) =>
 {
-    res.redirect('/login');
+    res.render('index');
     console.log('Customer join!');
 });
 app.use(express.static('public'));
 app.get('/signUp',(req,res) =>{
-    res.render('signup');
+    res.render('member/join');
 })
-var x;
 app.post('/signUp',(req,res)=>{
     var id = ID_Hashing(req.body.id);
     var pw = md5(req.body.pw+salt);
