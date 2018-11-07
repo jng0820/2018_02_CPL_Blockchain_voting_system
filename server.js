@@ -281,6 +281,8 @@ function web3_connect(){
 
 }
 
+var candidate_array = [];
+
 function ID_Hashing(_id){
     if(_id != 'admin')
         var id =  md5(id+salt);
@@ -299,7 +301,8 @@ function connectDB(){
         CandidateSchema = mongoose.Schema({
             idx: Number,
             name: String,
-            party: String
+            party: String,
+            vote_num: Number
         });
         UserSchema = mongoose.Schema({
             id: String,
@@ -334,10 +337,12 @@ app.post('/signUp',(req,res)=>{
             newUser.save(err =>{
 
             })
-            contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},() => {
+            var new_check = contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},() => {
 
             })
-            res.send("가입되었습니다.");
+            if(new_check == true) {
+                res.redirect('/login');
+            }
             console.log(id+' '+name+' signup success.');
         }
         else
@@ -377,26 +382,31 @@ app.get('/admin',(req,res) => {
 app.post('/admin',(req,res)=>{
     var check = false;
     //세션에서 받는 값에 따라, 투표 시작/종료 혹은 후보자등록 구분
-    /*
-    var name = req.body.name;
-    var party = req.body.party;
-    var id = ID_Hashing(req.session.id);
-    var newCandidate = new CandidateModel({idx: num_of_candidate, name: name, party: party});
-    newCandidate.save(err => {
+    if(req.body.name != null){
+        var name = req.body.name;
+        var party = req.body.party;
+        var id = ID_Hashing(req.session.id);
+        var newCandidate = new CandidateModel({idx: num_of_candidate, name: name, party: party, vote_num: 0});
+        newCandidate.save(err => {
 
-    })
-    num_of_candidate += 1;
-    contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
+        })
+        candidate_array.push({name:name,party:party,vote_num:0);
+        contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
 
-    })
-
+        })
+    }
     if(req.body.value == 1)
     {
-        check = contractInstance.startvote('admin',{from:web3.eth.accounts[0],gas:4700000},()=>{})
+        check = contractInstance.startvote('admin',{from:web3.eth.accounts[0],gas:4700000},()=>{});
     }
     else(req.body.value == 2)
     {
-        check = contractInstance.finish_Vote('admin',{from:web3.eth.accounts[0],gas:4700000},()=>{})
+        check = contractInstance.finish_Vote('admin',{from:web3.eth.accounts[0],gas:4700000},()=>{});
+        if(check == true){
+            for(var i=0;i<candidate_array.length;i++){
+                candidate_array[i]["vote_num"] = contractInstance.get_votenum(i,{from:web3.eth.accounts[0],gas:4700000},()=>{});
+            }
+        }
     }
     if(check == true)
     {
@@ -404,19 +414,10 @@ app.post('/admin',(req,res)=>{
             console.log('voting start!');
         else console.log('voting end');
     }
-    */
 })
 app.get('/vote',(req,res) => {
-    var name = new Array();
-    var party = new Array();
-    CandidateModel.find({}, (err,result)=>{
-        for (var i=0;i<result.length;i++)
-        {
-            name[i] = result[i]._doc.name;
-            party[i] = result[i]._doc.party;
-        }
-    });
-    res.render('vote',{name:name,party:party});
+
+    res.render('vote',{candidate : candidate_array);
 })
 app.post('/vote',(req,res)=>{
     var id = ID_Hashing(req.session.id);
@@ -430,18 +431,7 @@ app.post('/vote',(req,res)=>{
 })
 app.get('/result',(req,res) =>
 {
-    var name = new Array();
-    var party = new Array();
-    var vote_num = new Array();
-    CandidateModel.find({}, (err,result)=>{
-        for (var i=0;i<result.length;i++)
-        {
-            name[i] = result[i]._doc.name;
-            party[i] = result[i]._doc.party;
-            vote_num[i] = contractInstance.get_votenum(i,{from:web3.eth.accounts[0], gas:4700000},()=>{});
-        }
-    });
-    res.render('result',{name:name,party:party,num:vote_num});
+    res.render('result',{candidate : candidate_array});
 
 })
 app.listen(port,() =>
