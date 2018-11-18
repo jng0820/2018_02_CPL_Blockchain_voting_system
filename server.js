@@ -35,254 +35,254 @@ function web3_connect(){
     Web3 = require('web3')
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     abi = JSON.parse(`[
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "startvote",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_idx",
-				"type": "uint256"
-			}
-		],
-		"name": "get_votenum",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "a",
-				"type": "string"
-			},
-			{
-				"name": "b",
-				"type": "string"
-			}
-		],
-		"name": "compareString",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "signUp",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "candidateList",
-		"outputs": [
-			{
-				"name": "upVote",
-				"type": "uint256"
-			},
-			{
-				"name": "party",
-				"type": "string"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_id",
-				"type": "string"
-			},
-			{
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"name": "_party",
-				"type": "string"
-			}
-		],
-		"name": "addCandidator",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_id",
-				"type": "string"
-			},
-			{
-				"name": "_idxnumber",
-				"type": "uint256"
-			}
-		],
-		"name": "upVote",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "finish_Vote",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "party",
-				"type": "string"
-			}
-		],
-		"name": "AddCandidate",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "voteNumber",
-				"type": "uint256"
-			}
-		],
-		"name": "UpVote",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "Alive",
-				"type": "bool"
-			}
-		],
-		"name": "FinishVote",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "voteStart",
-		"type": "event"
-	}
-]`);
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				},
+				{
+					"name": "_name",
+					"type": "string"
+				},
+				{
+					"name": "_party",
+					"type": "string"
+				}
+			],
+			"name": "addCandidator",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "a",
+					"type": "string"
+				},
+				{
+					"name": "b",
+					"type": "string"
+				}
+			],
+			"name": "compareString",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				}
+			],
+			"name": "finish_Vote",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_idx",
+					"type": "uint256"
+				}
+			],
+			"name": "get_votenum",
+			"outputs": [
+				{
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				}
+			],
+			"name": "signUp",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				}
+			],
+			"name": "startvote",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				},
+				{
+					"name": "_idxnumber",
+					"type": "uint256"
+				}
+			],
+			"name": "upVote",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "name",
+					"type": "string"
+				},
+				{
+					"indexed": false,
+					"name": "party",
+					"type": "string"
+				}
+			],
+			"name": "AddCandidate",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "name",
+					"type": "string"
+				},
+				{
+					"indexed": false,
+					"name": "voteNumber",
+					"type": "uint256"
+				}
+			],
+			"name": "UpVote",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "Alive",
+					"type": "bool"
+				}
+			],
+			"name": "FinishVote",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "owner",
+					"type": "address"
+				}
+			],
+			"name": "voteStart",
+			"type": "event"
+		},
+		{
+			"constant": true,
+			"inputs": [
+				{
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "candidateList",
+			"outputs": [
+				{
+					"name": "upVote",
+					"type": "uint256"
+				},
+				{
+					"name": "party",
+					"type": "string"
+				},
+				{
+					"name": "name",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0xe54884535e63812a8a55e562d61a7d653362b4e8'); // deploy 할때 바꿀것
-
+    contractInstance = VotingContract.at('0xed808b0f789ab385973e101684ae3fce00418c89'); // deploy 할때 바꿀것
+	
 }
 
 var candidate_array = [];
-
+var isalive;
 function ID_Hashing(_id){
     if(_id != 'admin')
         var id =  md5(id+salt);
@@ -312,7 +312,14 @@ function connectDB(){
         });
         CandidateModel = mongoose.model("candidates",CandidateSchema);
         UserModel = mongoose.model("users", UserSchema);
-        console.log('mongoose connection open! : '+dbUrl);
+		console.log('mongoose connection open! : '+dbUrl);
+		CandidateModel.find({},(err,result)=>{
+			num_of_candidate = result.length;
+			for(var i=0;i<result.length;i++){
+				candidate_array.push({idx:result[i].idx,name:result[i].name, party:result[i].party,vote_num:0});
+				num_of_candidate += 1;
+			}
+		})
     });
     db.on('disconnected',connectDB);
 }
@@ -339,11 +346,10 @@ app.post('/signUp',(req,res)=>{
             })
             var new_check = contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},() => {
 
-            })
-            if(new_check == true) {
-                res.redirect('/login');
-            }
-            console.log(id+' '+name+' signup success.');
+			})
+			console.log(id+' '+name+' signup success.');
+            res.redirect('login');
+            
         }
         else
             res.send("이미 가입된 회원입니다.");
@@ -351,88 +357,104 @@ app.post('/signUp',(req,res)=>{
 })
 
 app.get('/login',(req,res) => {
-    if(req.session.id == 'admin')
+    if(req.session.identifier == 'admin')
         res.redirect('/admin');
     else {
-        UserModel.find({id: req.session.id}, (err, result) => {
+        UserModel.find({id: req.session.identifier}, (err, result) => {
             if (result == 0)
-                res.render('login');
+                res.render('member/login');
             else res.redirect('/vote');
 
         });
     }
 })
 app.post('/login',(req,res) =>{
-    var id = req.body.id;
+	req.session.identifier = 0;
+	var id = ID_Hashing(req.body.id);
     var pw = md5(req.body.pw+salt);
     UserModel.find({id: id}, (err, result)=>{
         if(result.length == 1 && result[0].password == pw)
         {
-            res.session.id = id;
+            req.session.identifier = id;
             res.redirect('/login');
         }
         else{
-            res.render('login_fail');
+            res.send('login_fail');
         }
     })
 })
 app.get('/admin',(req,res) => {
-
+	res.render('admin')
 })
 app.post('/admin',(req,res)=>{
-    var check = false;
+	var check;
+	var id = ID_Hashing(req.session.identifier);
     //세션에서 받는 값에 따라, 투표 시작/종료 혹은 후보자등록 구분
     if(req.body.name != null){
         var name = req.body.name;
         var party = req.body.party;
-        var id = ID_Hashing(req.session.id);
         var newCandidate = new CandidateModel({idx: num_of_candidate, name: name, party: party, vote_num: 0});
-        newCandidate.save(err => {
+		CandidateModel.find({name:name, party:party},(err,result)=>{
+			if(result.length == 0){
+				newCandidate.save(err => {
 
-        })
-        candidate_array.push({name:name,party:party,vote_num:0);
-        contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
-
-        })
+				})
+				contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
+					
+				})
+				candidate_array.push({idx:num_of_candidate,name:name, party:party,vote_num:0});
+				num_of_candidate += 1;
+			}
+		})
     }
-    if(req.body.value == 1)
+    if(req.body.value == 0)
     {
-        check = contractInstance.startvote('admin',{from:web3.eth.accounts[0],gas:4700000},()=>{});
+        check = contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
+        if(check == true) isalive = true;
     }
-    else(req.body.value == 2)
+    else(req.body.value == 1)
     {
-        check = contractInstance.finish_Vote('admin',{from:web3.eth.accounts[0],gas:4700000},()=>{});
+        check = contractInstance.finish_Vote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
         if(check == true){
             for(var i=0;i<candidate_array.length;i++){
                 candidate_array[i]["vote_num"] = contractInstance.get_votenum(i,{from:web3.eth.accounts[0],gas:4700000},()=>{});
             }
         }
+        if(check == true) isalive = false;
     }
     if(check == true)
     {
         if(req.body.value == 1)
             console.log('voting start!');
         else console.log('voting end');
-    }
+	}
+	res.redirect('/admin');
 })
 app.get('/vote',(req,res) => {
-
-    res.render('vote',{candidate : candidate_array);
+	var id = ID_Hashing(req.session.identifier);
+	UserModel.find({id: id}, (err, result)=>{
+        if(result.length != 1)
+            res.redirect('/');
+		else
+			res.render('vote/vote',{object_arr : candidate_array});
+		})
 })
 app.post('/vote',(req,res)=>{
-    var id = ID_Hashing(req.session.id);
+    var id = ID_Hashing(req.session.identifier);
     var idx = parseInt(req.body.idx);
     var check = false;
     check = contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {
 
     })
     if(check == true)
-        console.log('vote commit success.')
+		console.log('vote commit success.')
+	res.redirect('/');
 })
 app.get('/result',(req,res) =>
 {
-    res.render('result',{candidate : candidate_array});
-
+    if(isalive == false)
+        res.render('result',{candidate : candidate_array});
+    else res.render();
 })
 app.listen(port,() =>
 {

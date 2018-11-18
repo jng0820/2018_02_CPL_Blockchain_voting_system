@@ -34,7 +34,7 @@ contract Voting{
 
     constructor() public{
         owner = msg.sender;
-
+        voteAlive = false;
         emit voteStart(owner);
     }
     //constructor

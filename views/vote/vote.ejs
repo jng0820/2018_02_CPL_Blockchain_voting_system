@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+    <head>  </head>
+    <body>
+        <% var _list = JSON.stringify(object_arr)
+        _list = JSON.parse(_list)
+        %> 
+        <form action="/vote" method="post">
+        <% for(var i=0;i<_list.length;i++){%>
+            <p><input type="radio" name="idx" value=<%=i%>> <%=_list[i]["name"]%> <%=_list[i]["party"]%> </p>
+        <%}%>
+        <p><input type="submit" value="submit"></p>
+        </form>
+    
+    </body>
+</html>
