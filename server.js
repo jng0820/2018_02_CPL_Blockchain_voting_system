@@ -116,7 +116,7 @@ function web3_connect(){
 			"outputs": [
 				{
 					"name": "",
-					"type": "uint256"
+					"type": "uint8"
 				}
 			],
 			"payable": false,
@@ -260,7 +260,7 @@ function web3_connect(){
 			"outputs": [
 				{
 					"name": "upVote",
-					"type": "uint256"
+					"type": "uint8"
 				},
 				{
 					"name": "party",
@@ -277,7 +277,7 @@ function web3_connect(){
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0xed808b0f789ab385973e101684ae3fce00418c89'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0xa654ee163dbd700c3610cd8cd3797bd17213e257'); // deploy 할때 바꿀것
 	
 }
 
@@ -326,7 +326,6 @@ function connectDB(){
 app.get('/',(req,res) =>
 {
     res.render('index');
-    console.log('Customer join!');
 });
 app.use(express.static('public'));
 app.get('/signUp',(req,res) =>{
@@ -344,9 +343,7 @@ app.post('/signUp',(req,res)=>{
             newUser.save(err =>{
 
             })
-            var new_check = contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},() => {
-
-			})
+            var new_check = contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000});
 			console.log(id+' '+name+' signup success.');
             res.redirect('login');
             
@@ -384,7 +381,11 @@ app.post('/login',(req,res) =>{
     })
 })
 app.get('/admin',(req,res) => {
-	res.render('admin')
+	var id = ID_Hashing(req.session.identifier);
+	if(id!="admin")
+		res.redirect("/");
+	else
+		res.render('admin')
 })
 app.post('/admin',(req,res)=>{
 	var check;
@@ -399,9 +400,7 @@ app.post('/admin',(req,res)=>{
 				newCandidate.save(err => {
 
 				})
-				contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},() => {
-					
-				})
+				contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},()=>{});
 				candidate_array.push({idx:num_of_candidate,name:name, party:party,vote_num:0});
 				num_of_candidate += 1;
 			}
@@ -409,18 +408,18 @@ app.post('/admin',(req,res)=>{
     }
     if(req.body.value == 0)
     {
-        check = contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
-        if(check == true) isalive = true;
+        contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000});
+		isalive = true;
     }
-    else(req.body.value == 1)
+    else if(req.body.value == 1)
     {
         check = contractInstance.finish_Vote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
-        if(check == true){
-            for(var i=0;i<candidate_array.length;i++){
-                candidate_array[i]["vote_num"] = contractInstance.get_votenum(i,{from:web3.eth.accounts[0],gas:4700000},()=>{});
-            }
+        for(var i=0;i<candidate_array.length;i++){
+			var a = contractInstance.get_votenum.call(i,{from:web3.eth.accounts[0],gas:4700000}).toString();
+			a = Number(a);
+			candidate_array[i]["vote_num"] = a;
         }
-        if(check == true) isalive = false;
+        isalive = false;
     }
     if(check == true)
     {
@@ -431,6 +430,7 @@ app.post('/admin',(req,res)=>{
 	res.redirect('/admin');
 })
 app.get('/vote',(req,res) => {
+	console.log(candidate_array);
 	var id = ID_Hashing(req.session.identifier);
 	UserModel.find({id: id}, (err, result)=>{
         if(result.length != 1)
