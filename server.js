@@ -33,7 +33,7 @@ var CandidateModel;
 
 function web3_connect(){
     Web3 = require('web3')
-    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
     abi = JSON.parse(`[
 		{
 			"constant": false,
@@ -41,21 +41,32 @@ function web3_connect(){
 				{
 					"name": "_id",
 					"type": "string"
-				},
-				{
-					"name": "_name",
-					"type": "string"
-				},
-				{
-					"name": "_party",
-					"type": "string"
 				}
 			],
-			"name": "addCandidator",
+			"name": "startvote",
 			"outputs": [
 				{
 					"name": "",
 					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_idx",
+					"type": "uint256"
+				}
+			],
+			"name": "get_votenum",
+			"outputs": [
+				{
+					"name": "",
+					"type": "uint256"
 				}
 			],
 			"payable": false,
@@ -93,44 +104,6 @@ function web3_connect(){
 					"type": "string"
 				}
 			],
-			"name": "finish_Vote",
-			"outputs": [
-				{
-					"name": "",
-					"type": "bool"
-				}
-			],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "_idx",
-					"type": "uint256"
-				}
-			],
-			"name": "get_votenum",
-			"outputs": [
-				{
-					"name": "",
-					"type": "uint8"
-				}
-			],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "_id",
-					"type": "string"
-				}
-			],
 			"name": "signUp",
 			"outputs": [
 				{
@@ -143,14 +116,49 @@ function web3_connect(){
 			"type": "function"
 		},
 		{
+			"constant": true,
+			"inputs": [
+				{
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "candidateList",
+			"outputs": [
+				{
+					"name": "upVote",
+					"type": "uint256"
+				},
+				{
+					"name": "party",
+					"type": "string"
+				},
+				{
+					"name": "name",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"constant": false,
 			"inputs": [
 				{
 					"name": "_id",
 					"type": "string"
+				},
+				{
+					"name": "_name",
+					"type": "string"
+				},
+				{
+					"name": "_party",
+					"type": "string"
 				}
 			],
-			"name": "startvote",
+			"name": "addCandidator",
 			"outputs": [
 				{
 					"name": "",
@@ -174,6 +182,25 @@ function web3_connect(){
 				}
 			],
 			"name": "upVote",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				}
+			],
+			"name": "finish_Vote",
 			"outputs": [
 				{
 					"name": "",
@@ -247,37 +274,10 @@ function web3_connect(){
 			],
 			"name": "voteStart",
 			"type": "event"
-		},
-		{
-			"constant": true,
-			"inputs": [
-				{
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "candidateList",
-			"outputs": [
-				{
-					"name": "upVote",
-					"type": "uint8"
-				},
-				{
-					"name": "party",
-					"type": "string"
-				},
-				{
-					"name": "name",
-					"type": "string"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0xfa86607e9b29843b617b7abf15487e754ac2c8fd'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0x08ed395cb9166932acc4e8bc6a35933cc3281f4f'); // deploy 할때 바꿀것
 	
 }
 
@@ -342,8 +342,9 @@ app.post('/signUp',(req,res)=>{
             var newUser = new UserModel({id: id,password: pw,name: name, phone: phone});
             newUser.save(err =>{
 
-            })
-			var new_check = contractInstance.signUp.call(id,{from:web3.eth.accounts[0],gas:4700000}).toString();
+			})
+			var new_check = false;
+			contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
 			if(new_check == 'true')
 				console.log(req.body.id+' '+name+' signup success.');
             res.redirect('login');
@@ -409,12 +410,12 @@ app.post('/admin',(req,res)=>{
     }
     if(req.body.value == 0)
     {
-        check = contractInstance.startvote.call(id,{from:web3.eth.accounts[0],gas:4700000},()=>{}).toString();
+        contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
 		isalive = true;
     }
     else if(req.body.value == 1)
     {
-        check = contractInstance.finish_Vote.call(id,{from:web3.eth.accounts[0],gas:4700000},()=>{}).toString();
+        contractInstance.finish_Vote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
         for(var i=0;i<candidate_array.length;i++){
 			var a = contractInstance.get_votenum.call(i,{from:web3.eth.accounts[0],gas:4700000}).toString();
 			a = Number(a);
@@ -448,9 +449,7 @@ app.post('/vote',(req,res)=>{
     var id = ID_Hashing(req.session.identifier);
     var idx = parseInt(req.body.idx);
     var check = false;
-    check = contractInstance.upVote.call(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {
-
-    }).toString();
+    contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {});
     if(check == 'true')
 		console.log('vote commit success.')
 	res.redirect('/');
