@@ -277,7 +277,7 @@ function web3_connect(){
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0xa654ee163dbd700c3610cd8cd3797bd17213e257'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0xfa86607e9b29843b617b7abf15487e754ac2c8fd'); // deploy 할때 바꿀것
 	
 }
 
@@ -343,8 +343,9 @@ app.post('/signUp',(req,res)=>{
             newUser.save(err =>{
 
             })
-            var new_check = contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000});
-			console.log(id+' '+name+' signup success.');
+			var new_check = contractInstance.signUp.call(id,{from:web3.eth.accounts[0],gas:4700000}).toString();
+			if(new_check == 'true')
+				console.log(req.body.id+' '+name+' signup success.');
             res.redirect('login');
             
         }
@@ -408,12 +409,12 @@ app.post('/admin',(req,res)=>{
     }
     if(req.body.value == 0)
     {
-        contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000});
+        check = contractInstance.startvote.call(id,{from:web3.eth.accounts[0],gas:4700000},()=>{}).toString();
 		isalive = true;
     }
     else if(req.body.value == 1)
     {
-        check = contractInstance.finish_Vote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
+        check = contractInstance.finish_Vote.call(id,{from:web3.eth.accounts[0],gas:4700000},()=>{}).toString();
         for(var i=0;i<candidate_array.length;i++){
 			var a = contractInstance.get_votenum.call(i,{from:web3.eth.accounts[0],gas:4700000}).toString();
 			a = Number(a);
@@ -430,6 +431,9 @@ app.post('/admin',(req,res)=>{
 	res.redirect('/admin');
 })
 app.get('/vote',(req,res) => {
+	if(isalive == false)
+		res.redirect('/');
+	else{
 	console.log(candidate_array);
 	var id = ID_Hashing(req.session.identifier);
 	UserModel.find({id: id}, (err, result)=>{
@@ -438,23 +442,30 @@ app.get('/vote',(req,res) => {
 		else
 			res.render('vote/vote',{object_arr : candidate_array});
 		})
+	}
 })
 app.post('/vote',(req,res)=>{
     var id = ID_Hashing(req.session.identifier);
     var idx = parseInt(req.body.idx);
     var check = false;
-    check = contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {
+    check = contractInstance.upVote.call(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {
 
-    })
-    if(check == true)
+    }).toString();
+    if(check == 'true')
 		console.log('vote commit success.')
 	res.redirect('/');
 })
 app.get('/result',(req,res) =>
 {
-    if(isalive == false)
-        res.render('result',{candidate : candidate_array});
-    else res.render();
+	if(isalive == false)
+	{
+		keyObject = "vote_num";
+		candidate_array.sort(function(a,b){
+			return b[keyObject]-a[keyObject];
+		})
+		res.render('result',{candidate : candidate_array});
+	}
+	else res.redirect('/');
 })
 app.listen(port,() =>
 {

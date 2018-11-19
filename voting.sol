@@ -3,7 +3,7 @@ pragma solidity 0.4.25;
 
 contract Voting{
     struct candidate{
-        bytes32 upVote;
+        uint upVote;
         string party;
         string name;
     }
@@ -95,7 +95,7 @@ contract Voting{
     }
     // finish vote
 
-    function get_votenum(uint _idx) public onlyOwner returns(bytes32){
+    function get_votenum(uint _idx) public onlyOwner returns(uint){
         require(voteAlive == false);
         if(_idx < 0 || _idx>candidateList.length)
             return 0;
