@@ -277,7 +277,7 @@ function web3_connect(){
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0x08ed395cb9166932acc4e8bc6a35933cc3281f4f'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0x0795b48dcd3123623c9f3615eb622ce1628b9161'); // deploy 할때 바꿀것
 	
 }
 
@@ -343,7 +343,7 @@ app.post('/signUp',(req,res)=>{
             newUser.save(err =>{
 
 			})
-			var new_check = false;
+			var new_check = contractInstance.signUp.call(id).toString();
 			contractInstance.signUp(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
 			if(new_check == 'true')
 				console.log(req.body.id+' '+name+' signup success.');
@@ -402,33 +402,38 @@ app.post('/admin',(req,res)=>{
 				newCandidate.save(err => {
 
 				})
+				var check = contractInstance.addCandidator.call(id,name,party).toString();
 				contractInstance.addCandidator(id,name,party,{from:web3.eth.accounts[0],gas:4700000},()=>{});
-				candidate_array.push({idx:num_of_candidate,name:name, party:party,vote_num:0});
-				num_of_candidate += 1;
+				if(check == 'true')
+				{
+					candidate_array.push({idx:num_of_candidate,name:name, party:party,vote_num:0});
+					num_of_candidate += 1;
+					console.log(name+ ' ' + party + ' add');
+				}
 			}
 		})
     }
     if(req.body.value == 0)
     {
-        contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
-		isalive = true;
+		check = contractInstance.startvote.call(id).toString();
+		contractInstance.startvote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
+		if(check == 'true')
+		{
+			isalive = true;
+			console.log('voting start!');
+		}
     }
     else if(req.body.value == 1)
     {
-        contractInstance.finish_Vote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
-        for(var i=0;i<candidate_array.length;i++){
-			var a = contractInstance.get_votenum.call(i,{from:web3.eth.accounts[0],gas:4700000}).toString();
-			a = Number(a);
-			candidate_array[i]["vote_num"] = a;
-        }
-        isalive = false;
+		contractInstance.finish_Vote(id,{from:web3.eth.accounts[0],gas:4700000},()=>{});
+		check = contractInstance.finish_Vote.call(id).toString();
+		if(check == 'true')
+		{
+			console.log('voting end!');
+			isalive = false;
+		}
     }
-    if(check == true)
-    {
-        if(req.body.value == 1)
-            console.log('voting start!');
-        else console.log('voting end');
-	}
+
 	res.redirect('/admin');
 })
 app.get('/vote',(req,res) => {
@@ -448,8 +453,9 @@ app.get('/vote',(req,res) => {
 app.post('/vote',(req,res)=>{
     var id = ID_Hashing(req.session.identifier);
     var idx = parseInt(req.body.idx);
-    var check = false;
-    contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {});
+	var check = false;
+	check = contractInstance.upVote.call(id,idx).toString();
+	contractInstance.upVote(id,idx,{from:web3.eth.accounts[0],gas:4700000},() => {});
     if(check == 'true')
 		console.log('vote commit success.')
 	res.redirect('/');
@@ -458,6 +464,11 @@ app.get('/result',(req,res) =>
 {
 	if(isalive == false)
 	{
+		for(var i=0;i<candidate_array.length;i++){
+			var a = contractInstance.get_votenum.call(i).toString();
+			a = Number(a);
+			candidate_array[i]["vote_num"] = a;
+		}
 		keyObject = "vote_num";
 		candidate_array.sort(function(a,b){
 			return b[keyObject]-a[keyObject];
