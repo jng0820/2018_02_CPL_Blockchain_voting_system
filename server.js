@@ -329,7 +329,7 @@ app.get('/',(req,res) =>
 });
 app.use(express.static('public'));
 app.get('/signUp',(req,res) =>{
-    res.render('member/join');
+    res.render('member/join2');
 })
 app.post('/signUp',(req,res)=>{
     var id = ID_Hashing(req.body.id);
