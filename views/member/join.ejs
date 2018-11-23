@@ -1,30 +1,30 @@
-
-<? include "../header.html"; ?>
-<? include "sub_img.html"; ?>
-<? include "sub_menu.html"; ?>
+<!DOCTYPE html>
+<head>
+    <% include ../header %>
+</head>
+<% include ./sub_img%>
+<% include ./sub_menu%>
 
 <article>
     
-<h1>Join Us</h1>
+<h1>회원가입</h1>
 <form action='/signUp' method='post'>
 <fieldset>
-<legend>Basic Info</legend>
-    <label>User ID</label> <input name="id" type="text" class="id"> <input name="" type="button" value="dup. check" class="dup"><br>
-    <label>Password</label> <input name="pw" type="password" class="pass"><br>
-    <label>Retype Password</label> <input name="" type="password" class="pass"><br>
-    <label>Name</label> <input name="name" type="text" class="nick"><br>
-    <label>Mobile Phone Number</label> <input name="phone" type="tel" class="mobile"><br>
+<legend>공정한 투표를 위하여 가입절차를 진행해주세요. </legend>
+<label>이름</label> <input name="name" type="text" class="nick"><br>
+<label>번호</label> <input name="phone" type="num" class="num" ><br>
+<label>ID</label> <input name="id" type="text" class="id"> <input name="" type="button" value="중복확인" class="dup"><br>
+<label>Password</label> <input name="pw" type="password" class="pass"><br>
+<label>Password 확인</label> <input name="" type="password" class="pass"><br>
 
 </fieldset>
 
-
 <div class="clear"></div>
 <div id="buttons">
-<input name="" type="submit" value="Submit" class="submit"> <input name="" type="button" value="Cancel" class="cancel">
+<input name="" type="submit" value="가입하기" class="submit"> <input name="" type="button" value="취소하기" class="cancel">
 </div>
 
 </form> 
     
 </article>    
-<? include "../footer.html"; ?>   
-
+<% include ../footer %>

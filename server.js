@@ -277,12 +277,12 @@ function web3_connect(){
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0x0795b48dcd3123623c9f3615eb622ce1628b9161'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0x672cf23100f28aee4ac4bf926a3dbe0df07cc7c9'); // deploy 할때 바꿀것
 	
 }
 
 var candidate_array = [];
-var isalive;
+var isalive=false;
 function ID_Hashing(_id){
     if(_id != 'admin')
         var id =  md5(id+salt);
@@ -329,7 +329,7 @@ app.get('/',(req,res) =>
 });
 app.use(express.static('public'));
 app.get('/signUp',(req,res) =>{
-    res.render('member/join2');
+    res.render('member/join');
 })
 app.post('/signUp',(req,res)=>{
     var id = ID_Hashing(req.body.id);
@@ -381,6 +381,10 @@ app.post('/login',(req,res) =>{
             res.send('login_fail');
         }
     })
+})
+app.get('/logout',(req,res) =>{
+	req.session.identifier = null;
+	res.redirect("/");
 })
 app.get('/admin',(req,res) => {
 	var id = ID_Hashing(req.session.identifier);
@@ -437,16 +441,16 @@ app.post('/admin',(req,res)=>{
 	res.redirect('/admin');
 })
 app.get('/vote',(req,res) => {
-	if(isalive == false)
+	if(isalive == false || req.session.identifier == null)
 		res.redirect('/');
 	else{
-	console.log(candidate_array);
-	var id = ID_Hashing(req.session.identifier);
-	UserModel.find({id: id}, (err, result)=>{
-        if(result.length != 1)
-            res.redirect('/');
-		else
-			res.render('vote/vote',{object_arr : candidate_array});
+		console.log(candidate_array);
+		var id = ID_Hashing(req.session.identifier);
+		UserModel.find({id: id}, (err, result)=>{
+        	if(result.length != 1)
+            	res.redirect('/');
+			else
+				res.render('vote/vote',{object_arr : candidate_array});
 		})
 	}
 })

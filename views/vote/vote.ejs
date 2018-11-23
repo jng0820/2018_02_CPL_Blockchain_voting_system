@@ -1,7 +1,6 @@
-<!DOCTYPE HTML>
-<html>
-    <head>  </head>
-    <body>
+<% include ../header %>
+<% include ./sub_img %>
+<% include ./sub_menu %>
         <% var _list = JSON.stringify(object_arr)
         _list = JSON.parse(_list)
         %> 
@@ -11,6 +10,4 @@
         <%}%>
         <p><input type="submit" value="submit"></p>
         </form>
-    
-    </body>
-</html>
+<% include ../footer %>
