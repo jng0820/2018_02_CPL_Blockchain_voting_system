@@ -41,32 +41,21 @@ function web3_connect(){
 				{
 					"name": "_id",
 					"type": "string"
+				},
+				{
+					"name": "_name",
+					"type": "string"
+				},
+				{
+					"name": "_party",
+					"type": "string"
 				}
 			],
-			"name": "startvote",
+			"name": "addCandidator",
 			"outputs": [
 				{
 					"name": "",
 					"type": "bool"
-				}
-			],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "_idx",
-					"type": "uint256"
-				}
-			],
-			"name": "get_votenum",
-			"outputs": [
-				{
-					"name": "",
-					"type": "uint256"
 				}
 			],
 			"payable": false,
@@ -104,6 +93,44 @@ function web3_connect(){
 					"type": "string"
 				}
 			],
+			"name": "finish_Vote",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_idx",
+					"type": "uint256"
+				}
+			],
+			"name": "get_votenum",
+			"outputs": [
+				{
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "_id",
+					"type": "string"
+				}
+			],
 			"name": "signUp",
 			"outputs": [
 				{
@@ -116,49 +143,14 @@ function web3_connect(){
 			"type": "function"
 		},
 		{
-			"constant": true,
-			"inputs": [
-				{
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "candidateList",
-			"outputs": [
-				{
-					"name": "upVote",
-					"type": "uint256"
-				},
-				{
-					"name": "party",
-					"type": "string"
-				},
-				{
-					"name": "name",
-					"type": "string"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"constant": false,
 			"inputs": [
 				{
 					"name": "_id",
 					"type": "string"
-				},
-				{
-					"name": "_name",
-					"type": "string"
-				},
-				{
-					"name": "_party",
-					"type": "string"
 				}
 			],
-			"name": "addCandidator",
+			"name": "startvote",
 			"outputs": [
 				{
 					"name": "",
@@ -182,25 +174,6 @@ function web3_connect(){
 				}
 			],
 			"name": "upVote",
-			"outputs": [
-				{
-					"name": "",
-					"type": "bool"
-				}
-			],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "_id",
-					"type": "string"
-				}
-			],
-			"name": "finish_Vote",
 			"outputs": [
 				{
 					"name": "",
@@ -274,15 +247,42 @@ function web3_connect(){
 			],
 			"name": "voteStart",
 			"type": "event"
+		},
+		{
+			"constant": true,
+			"inputs": [
+				{
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"name": "candidateList",
+			"outputs": [
+				{
+					"name": "upVote",
+					"type": "uint256"
+				},
+				{
+					"name": "party",
+					"type": "string"
+				},
+				{
+					"name": "name",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0x672cf23100f28aee4ac4bf926a3dbe0df07cc7c9'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0x3986b0dd4ab23600950252c87a9226836f7b56b8'); // deploy 할때 바꿀것
 	
 }
 
 var candidate_array = [];
-var isalive=false;
+var isalive=null;
 function ID_Hashing(_id){
     if(_id != 'admin')
         var id =  md5(id+salt);
@@ -391,7 +391,7 @@ app.get('/admin',(req,res) => {
 	if(id!="admin")
 		res.redirect("/");
 	else
-		res.render('admin')
+		res.render('admin/admin')
 })
 app.post('/admin',(req,res)=>{
 	var check;
@@ -477,12 +477,13 @@ app.get('/result',(req,res) =>
 		candidate_array.sort(function(a,b){
 			return b[keyObject]-a[keyObject];
 		})
-		res.render('result',{candidate : candidate_array});
+		res.render('result/result',{candidate : candidate_array});
 	}
 	else res.redirect('/');
 })
 app.listen(port,() =>
 {
+	isalive = null
     console.log(`Connected ${port} port!`);
     web3_connect();
     if(web3.eth.accounts) {
