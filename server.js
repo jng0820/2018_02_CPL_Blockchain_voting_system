@@ -277,7 +277,7 @@ function web3_connect(){
 		}
 	]`);
     VotingContract = web3.eth.contract(abi);
-    contractInstance = VotingContract.at('0x3986b0dd4ab23600950252c87a9226836f7b56b8'); // deploy 할때 바꿀것
+    contractInstance = VotingContract.at('0x211508dc81efb26e7c0b9bf6e0ce04b704edf9ad'); // deploy 할때 바꿀것
 	
 }
 
@@ -285,7 +285,7 @@ var candidate_array = [];
 var isalive=null;
 function ID_Hashing(_id){
     if(_id != 'admin')
-        var id =  md5(id+salt);
+        var id =  md5(_id+salt);
     else var id = 'admin';
     return id;
 }
@@ -444,14 +444,7 @@ app.get('/vote',(req,res) => {
 	if(isalive == false || req.session.identifier == null)
 		res.redirect('/');
 	else{
-		console.log(candidate_array);
-		var id = ID_Hashing(req.session.identifier);
-		UserModel.find({id: id}, (err, result)=>{
-        	if(result.length != 1)
-            	res.redirect('/');
-			else
-				res.render('vote/vote',{object_arr : candidate_array});
-		})
+		res.render('vote/vote',{object_arr : candidate_array});
 	}
 })
 app.post('/vote',(req,res)=>{
